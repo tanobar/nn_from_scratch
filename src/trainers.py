@@ -13,11 +13,11 @@ def forward_prop(layers, W, b, X):
     Z = [None] * len(layers)
     A = [None] * len(layers)
 
-    Z[0] = W[0].dot(X) + b[0]
-    A[0] = layers[0].activate(Z[0])
+    #Z[0] = W[0].dot(X) + b[0]
+    #A[0] = layers[0].activate(Z[0])
 
-    for i in range(1, len(layers)):
-        Z[i] = W[i].dot(A[i-1]) + b[i]
+    for i in range(len(layers)):
+        Z[i] = W[i].dot(A[i-1] if i > 0 else X) + b[i]
         A[i] = layers[i].activate(Z[i])
     
     return Z, A
@@ -27,23 +27,24 @@ def forward_prop(layers, W, b, X):
 def back_prop(layers, task, Z, A, W, X, Y):
     m = Y.size
     L = len(layers)
+    dZ = [None] * L #maybe to delete and delete [] on dZ below
     dW = [None] * L
     db = [None] * L
     
     # compute dZ for the last layer
-    dZ = error_comp(A[-1], Y, task)
+    dZ[-1] = error_comp(A[-1], Y, task)
     
     # loop backwards through layers to calculate gradients
     for i in reversed(range(L)):
         if i == L - 1:
             # output layer gradients
-            dW[i] = 1 / m * dZ.dot(A[i].T)
-            db[i] = 1 / m * np.sum(dZ, axis=1, keepdims=True)
+            dW[i] = 1 / m * dZ[i].dot(A[i-1].T)
+            db[i] = 1 / m * np.sum(dZ[i], axis=1, keepdims=True)
         else:
             # hidden layer gradients
-            dZ = W[i + 1].T.dot(dZ) * layers[i].activation_deriv(Z[i])
-            dW[i] = 1 / m * dZ.dot(A[i].T if i > 0 else X.T)
-            db[i] = 1 / m * np.sum(dZ, axis=1, keepdims=True)
+            dZ[i] = W[i + 1].T.dot(dZ[i+1]) * layers[i].activate_deriv(Z[i])
+            dW[i] = 1 / m * dZ[i].dot(A[i-1].T if i > 0 else X.T)
+            db[i] = 1 / m * np.sum(dZ[i], axis=1, keepdims=True)
     
     return dW, db
 
@@ -66,9 +67,9 @@ def grad_descent(X, Y, W, b, layers, task, epochs, eta, optimizer):
         accuracy_data.append(accuracy(A[-1], Y))
 
         dW, db = back_prop(layers, task, Z, A, W, X, Y)
-        W, b = update_params(num_layers, W, b, dW, db, eta, optimizer)
+        W, b = update_params(len(layers), W, b, dW, db, eta, optimizer)
 
-        loss = mse(A[len(A)-1], Y) # TODO Change this fo MONK
+        loss = cross_entropy_loss(A[len(A)-1], Y) # TODO Change this fo MONK
         loss_data.append({'epoch': i, 'loss': loss})
 
     # TODO put this saving in a function
@@ -84,6 +85,6 @@ def train(algo, X, Y, W, b, layers, task, epochs, eta, optimizer):
     model = []
     if algo == 'gd':
         W, b = grad_descent(X, Y, W, b, layers, task, epochs, eta, optimizer)
-        model.extend([W,b])
+        model.extend([W, b])
     return model
 

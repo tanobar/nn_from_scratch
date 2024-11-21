@@ -5,7 +5,7 @@ from inizializations import *
 class Net:
     def __init__(self): #TODO add params
         # hyperparameters
-        self._task = 'classification'
+        self._task = 'bin_classification'
         self._input_features = 6
         self._inizializer = 'uniform'
         self._eta = 0.001
