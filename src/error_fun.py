@@ -28,6 +28,9 @@ def deriv_cross_entropy_loss(A, Y): # maybe useless and redundant
 
 def error_comp(A, Y, task):
     if task == 'bin_classification':
+        return A - Y
+
+    if task == 'mutli_classification':
         return A - one_hot(Y)
 
     if task == 'regression':

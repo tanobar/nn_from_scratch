@@ -14,7 +14,7 @@ def accuracy_bin_classification(A, Y):
     predicted_classes = (A >= 0.5).astype(int)
     return np.mean(predicted_classes == Y)
 
-def accuracy(A, Y): # TODO modularize
+def accuracy(A, Y): # TODO remove
     return accuracy_bin_classification(A, Y)
     
 
