@@ -64,19 +64,20 @@ def grad_descent(X, Y, W, b, layers, task, epochs, eta, optimizer):
     for i in range(epochs):
         Z, A = forward_prop(layers, W, b, X)
 
-        accuracy_data.append(accuracy(A[-1], Y))
+        acc = accuracy(A[-1], Y)
+        accuracy_data.append(acc * 100)
 
         dW, db = back_prop(layers, task, Z, A, W, X, Y)
         W, b = update_params(len(layers), W, b, dW, db, eta, optimizer)
 
-        loss = cross_entropy_loss(A[len(A)-1], Y) # TODO Change this fo MONK
+        loss = cross_entropy_loss(A[-1], Y) # TODO Change this fo MONK
         loss_data.append({'epoch': i, 'loss': loss})
 
     # TODO put this saving in a function
     loss_df = pd.DataFrame(loss_data)
     loss_df.to_csv('loss_values.csv', index=False)
 
-    save_accuracy_plot(accuracy_data)
+    plot_accuracy(accuracy_data, epochs)
 
     return W, b
 
