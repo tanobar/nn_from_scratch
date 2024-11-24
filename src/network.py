@@ -8,9 +8,9 @@ class Net:
         self._task = 'bin_classification'
         self._input_features = 17
         self._inizializer = 'uniform'
-        self._eta = 0.001
+        self._eta = 0.005
         self._momentum = 'none'
-        self._epochs = 2000
+        self._epochs = 1500
         self._optimizer = "gd"
 
         self._layers = []

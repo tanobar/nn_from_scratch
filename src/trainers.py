@@ -82,10 +82,30 @@ def grad_descent(X, Y, W, b, layers, task, epochs, eta, momentum):
     return W, b
 
 
-def train(optimizer, X, Y, W, b, layers, task, epochs, eta, momentum):
+def train_model(optimizer, X, Y, W, b, layers, task, epochs, eta, momentum):
     model = []
     if optimizer == 'gd':
         W, b = grad_descent(X, Y, W, b, layers, task, epochs, eta, momentum)
         model.extend([W, b])
     return model
+
+
+def test_model(W, b, layers, X, Y):
+    
+    # Forward propagation for predictions
+    Z, A = forward_prop(layers, W, b, X)
+    
+    Y_pred = A[-1]
+
+    acc = accuracy(A[-1], Y) * 100
+    print(f"Test Accuracy: " , acc)
+
+    #plotting the graphic of targets vs predicions
+    plt.plot(Y.flatten(), label="Target")
+    plt.plot(Y_pred.flatten(), label="Model")
+    plt.xlabel("Examples")
+    plt.ylabel("Values")
+    plt.title("Model Predictions vs. Target Values")
+    plt.legend()
+    plt.show()
 
