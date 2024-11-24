@@ -11,7 +11,7 @@ class Net:
         self._eta = 0.001
         self._momentum = 'none'
         self._epochs = 2000
-        self._training_algo = "gd"
+        self._optimizer = "gd"
 
         self._layers = []
         self._W = []
