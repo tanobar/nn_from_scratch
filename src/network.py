@@ -6,11 +6,11 @@ class Net:
     def __init__(self): #TODO add params
         # hyperparameters
         self._task = 'bin_classification'
-        self._input_features = 6
+        self._input_features = 17
         self._inizializer = 'uniform'
         self._eta = 0.001
-        self._optimizer = 'none'
-        self._epochs = 500
+        self._momentum = 'none'
+        self._epochs = 2000
         self._training_algo = "gd"
 
         self._layers = []
@@ -41,7 +41,7 @@ class Net:
         self._layers.append(Layer(num_units, activation))
         if len(self._W) == 0: # it means that is the first hidden layer and recives as input the feature matrix X
             self._W.append(init_weights(self._inizializer, num_units, self.get_num_features()))
-            self._b.append(np.zeros((num_units, 1))) # TODO modularize inizialization of b (?)
+            self._b.append(np.zeros((num_units, 1)))
         else:
             self._W.append(init_weights(self._inizializer, num_units, self.get_num_inputs()))
             self._b.append(np.zeros((num_units, 1)))

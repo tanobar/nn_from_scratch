@@ -38,19 +38,19 @@ def back_prop(layers, task, Z, A, W, X, Y):
     for i in reversed(range(L)):
         if i == L - 1:
             # output layer gradients
-            dW[i] = 1 / m * dZ[i].dot(A[i-1].T)
-            db[i] = 1 / m * np.sum(dZ[i], axis=1, keepdims=True)
+            dW[i] = dZ[i].dot(A[i-1].T)
+            db[i] = np.sum(dZ[i], axis=1, keepdims=True)
         else:
             # hidden layer gradients
             dZ[i] = W[i + 1].T.dot(dZ[i+1]) * layers[i].activate_deriv(Z[i])
-            dW[i] = 1 / m * dZ[i].dot(A[i-1].T if i > 0 else X.T)
-            db[i] = 1 / m * np.sum(dZ[i], axis=1, keepdims=True)
+            dW[i] = dZ[i].dot(A[i-1].T if i > 0 else X.T)
+            db[i] = np.sum(dZ[i], axis=1, keepdims=True)
     
     return dW, db
 
 
-def update_params(num_layers, W, b, dW, db, eta, optimizer):
-    if optimizer == 'none':
+def update_params(num_layers, W, b, dW, db, eta, momentum):
+    if momentum == 'none':
         for i in range(num_layers):
             W[i] = W[i] - eta * dW[i]
             b[i] = b[i] - eta * db[i]
@@ -58,7 +58,7 @@ def update_params(num_layers, W, b, dW, db, eta, optimizer):
 
 
 # gradient descend algorithm
-def grad_descent(X, Y, W, b, layers, task, epochs, eta, optimizer):
+def grad_descent(X, Y, W, b, layers, task, epochs, eta, momentum):
     loss_data = []
     accuracy_data = []
     for i in range(epochs):
@@ -68,9 +68,9 @@ def grad_descent(X, Y, W, b, layers, task, epochs, eta, optimizer):
         accuracy_data.append(acc * 100)
 
         dW, db = back_prop(layers, task, Z, A, W, X, Y)
-        W, b = update_params(len(layers), W, b, dW, db, eta, optimizer)
+        W, b = update_params(len(layers), W, b, dW, db, eta, momentum)
 
-        loss = cross_entropy_loss(A[-1], Y) # TODO Change this fo MONK
+        loss = mse(A[-1], Y)
         loss_data.append({'epoch': i, 'loss': loss})
 
     # TODO put this saving in a function
@@ -82,10 +82,10 @@ def grad_descent(X, Y, W, b, layers, task, epochs, eta, optimizer):
     return W, b
 
 
-def train(algo, X, Y, W, b, layers, task, epochs, eta, optimizer):
+def train(optimizer, X, Y, W, b, layers, task, epochs, eta, momentum):
     model = []
-    if algo == 'gd':
-        W, b = grad_descent(X, Y, W, b, layers, task, epochs, eta, optimizer)
+    if optimizer == 'gd':
+        W, b = grad_descent(X, Y, W, b, layers, task, epochs, eta, momentum)
         model.extend([W, b])
     return model
 
