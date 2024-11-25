@@ -25,5 +25,3 @@ class Layer:
         if self._activation_fun == 'sigmoid':
             return deriv_sigmoid(Z)
 
-
-    

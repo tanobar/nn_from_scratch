@@ -5,7 +5,8 @@ def mse(A, Y):
     return np.mean(np.square(A - Y.T))
 
 def deriv_mse(A, Y):
-    return (A - Y.T)
+    m = Y.size
+    return 2/m * (A - Y.T)
 
 def error_comp(A, Y, task):
     if task == 'bin_classification':
