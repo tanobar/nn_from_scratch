@@ -56,6 +56,10 @@ class Net:
 
         if "epochs" in self._hyperparameters and not (self._hyperparameters["epochs"] > 0):
             raise InvalidHyperparameterError(f"'epochs' must be greater than 0. Got {type(self._hyperparameters['epochs'])}.")
+        
+        if "alpha" in self._hyperparameters and not (0.5 <= self._hyperparameters["alpha"] <= 0.9):
+            raise InvalidHyperparameterError(f"'alpha' must be between 0.5 and 0.9. Got {type(self._hyperparameters['alpha'])}.")
+
 
     def get_hyperparameters(self):
         return self._hyperparameters
