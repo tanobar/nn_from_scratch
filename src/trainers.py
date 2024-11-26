@@ -48,7 +48,7 @@ def back_prop(layers, task, Z, A, W, X, Y):
 
 
 def update_params(num_layers, W, b, dW, db, eta, momentum):
-    if momentum == 'none': #TODO change strcmp with boolean
+    if not momentum: #TODO change with the opposite (if momentum)
         for i in range(num_layers):
             W[i] = W[i] - eta * dW[i]
             b[i] = b[i] - eta * db[i]
@@ -80,7 +80,7 @@ def grad_descent(X, Y, W, b, layers, task, epochs, eta, momentum):
     return W, b
 
 
-def train_model(optimizer, X, Y, W, b, layers, task, epochs, eta, momentum):
+def train_model(X, Y, W, b, layers, optimizer, task, epochs, eta, momentum):
     model = []
     if optimizer == 'gd':
         W, b = grad_descent(X, Y, W, b, layers, task, epochs, eta, momentum)
