@@ -13,6 +13,7 @@ class Net:
         self._epochs = 2500
         self._optimizer = "gd"
 
+
         self._layers = []
         self._W = []
         self._b = []

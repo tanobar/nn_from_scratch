@@ -8,7 +8,7 @@ def deriv_mse(A, Y):
     m = Y.size
     return 2/m * (A - Y.T)
 
-def error_comp(A, Y, task):
+def error_computation(A, Y, task):
     if task == 'bin_classification':
         return deriv_mse(A, Y)
 

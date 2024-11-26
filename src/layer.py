@@ -16,8 +16,6 @@ class Layer:
             return relu(Z)
         if self._activation_fun == 'sigmoid':
             return sigmoid(Z)
-        if self._activation_fun == 'softmax':
-            return softmax(Z)
         
     def activate_deriv(self, Z):
         if self._activation_fun == 'relu':

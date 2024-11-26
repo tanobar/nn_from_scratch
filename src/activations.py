@@ -12,9 +12,3 @@ def sigmoid(Z):
 def deriv_sigmoid(Z):
     return Z * (1 - Z)
 
-def softmax(Z):
-    return np.exp(Z.astype(float)) / sum(np.exp(Z.astype(float)))
-
-def deriv_softmax(Z):
-    return softmax(Z) * (1 - softmax(Z))
-

@@ -2,19 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def accuracy_multi_classification(A, Y):
-    pred_classes = np.argmax(A, axis=1)
-    if Y.ndim == 1:
-        true_classes = Y
-    else:
-        true_classes = np.argmax(Y, axis=1)
-    return np.mean(pred_classes == true_classes)
-
 def accuracy_bin_classification(A, Y):
     predicted_classes = (A >= 0.5).astype(int)
     return np.mean(predicted_classes == Y)
 
-def accuracy(A, Y): # TODO remove
+def accuracy(A, Y): # TODO change and modularize
     return accuracy_bin_classification(A, Y)
     
 
