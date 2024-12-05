@@ -5,9 +5,6 @@ from metrics import *
 from layer import Layer
 
 
-# aggiungere un controllo per assicurarti che la dimensione di W[i] sia compatibile con A[i-1] per evitare
-# errori difficili da tracciare
-
 def forward_prop(layers, W, b, X):
     Z, A = [None] * len(layers), [None] * len(layers)
 
@@ -24,7 +21,7 @@ def back_prop(layers, task, Z, A, W, X, Y):
     dZ, dW, db = [None] * L, [None] * L, [None] * L # maybe to delete and delete [] on dZ below
     
     # compute dZ for the last layer. By distributing 1/m before backprop (see error_computation()), the gradient with respect 
-    # to weights and biases already includes the normalization factor -> omitted (1/m) during grandients and biases computation
+    # to weights and biases already includes the normalization factor, so (1/m) can be omitted during grandients and biases computation
     dZ[-1] = error_computation(A[-1], Y, task)
     
     # loop backwards through layers to calculate gradients
@@ -62,7 +59,7 @@ def update_params(num_layers, W, b, dW, db, eta, momentum, alpha, W_new, b_new):
             W[i] = W[i] - eta * dW[i]
             b[i] = b[i] - eta * db[i]
 
-    return W, b, W_new, b_new   
+    return W, b, W_new, b_new
 
 
 # gradient descend algorithm

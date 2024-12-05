@@ -4,11 +4,11 @@ from layer import Layer
 from inizializations import *
 
 class InvalidHyperparameterError(Exception):
-    """Custom exception for invalid hyperparameter values."""
+    # custom exception for invalid hyperparameter values
     pass
 
 class Net:
-    def __init__(self, config_path): #TODO add params
+    def __init__(self, config_path):
         self._hyperparameters = self._load_config(config_path)
         self._validate_hyperparameters()
         self._layers = []
