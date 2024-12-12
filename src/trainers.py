@@ -16,7 +16,6 @@ def forward_prop(layers, W, b, X):
 
 
 def back_prop(layers, task, Z, A, W, X, Y):
-    m = Y.size
     L = len(layers)
     dZ, dW, db = [None] * L, [None] * L, [None] * L # maybe to delete and delete [] on dZ below
     
