@@ -39,7 +39,7 @@ def back_prop(layers, task, Z, A, W, X, Y):
     return dW, db
 
 
-def update_params(num_layers, W, b, dW, db, eta, momentum, alpha, W_new, b_new):
+def update_params(num_layers, W, b, dW, db, eta, momentum, alpha, lambd, W_new, b_new):
     if momentum:
         if W_new is None:
             W_new = [np.zeros_like(W[i]) for i in range(num_layers)]
@@ -50,13 +50,19 @@ def update_params(num_layers, W, b, dW, db, eta, momentum, alpha, W_new, b_new):
             # momentum
             W_new[i] = eta * dW[i] + alpha * W_new[i]
             b_new[i] = eta * db[i] + alpha * b_new[i]
-            
-            W[i] = W[i] - W_new[i]
+
+            if lambd > 0:
+                W[i] = W[i] - W_new[i] - eta * lambd * W[i]
+            else:
+                W[i] = W[i] - W_new[i]
             b[i] = b[i] - b_new[i]
 
     else:
         for i in range(num_layers):
-            W[i] = W[i] - eta * dW[i]
+            if lambd > 0:
+                W[i] = W[i] - eta * dW[i] - eta * lambd * W[i]
+            else:
+                W[i] = W[i] - eta * dW[i]
             b[i] = b[i] - eta * db[i]
 
     return W, b, W_new, b_new
@@ -74,7 +80,8 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
 
         dW, db = back_prop(layers, hyperparameters['task'], Z, A, W, X, Y)
         W, b, W_new, b_new = update_params(len(layers), W, b, dW, db, hyperparameters['eta'],
-                                            hyperparameters['momentum'], hyperparameters['alpha'], W_new, b_new)
+                                            hyperparameters['momentum'], hyperparameters['alpha'],
+                                            hyperparameters['lambd'], W_new, b_new)
 
         loss = mse(A[-1], Y)
         loss_data.append({'epoch': i, 'loss': loss})

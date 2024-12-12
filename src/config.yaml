@@ -4,5 +4,6 @@ initializer: uniform # uniform OR xavier OR he
 eta: 0.1 # 0 < eta < 1
 momentum: True # True OR False
 alpha: 0.6 # parameter for momentum: [0.5, 0.9]
+lambd: 0.01 # must be lambd > 0 for activating regularization
 epochs: 1000 # epochs > 0
 optimizer: gd # gd (Gradient Descent)
