@@ -32,8 +32,8 @@ def he_init(n, m):
     Initialize weights using He initialization.
 
     Parameters:
-    - n: Number of rows (input units).
-    - m: Number of columns (output units).
+    - n: Number of rows.
+    - m: Number of columns.
 
     Returns:
     - Initialized weight matrix.

@@ -1,9 +1,13 @@
-task: bin_classification # bin_classification OR regression
-input_features: 17
+err_fun: mse # MSE
+input_features: 17 
 initializer: uniform # uniform OR xavier OR he
 eta: 0.1 # 0 < eta < 1
 momentum: True # True OR False
-alpha: 0.6 # parameter for momentum: [0.5, 0.9]
+alpha: 0.6 # parameter for momentum: 0.5 <= alpha <= 0.9
 lambd: 0.01 # must be lambd > 0 for activating regularization
 epochs: 1000 # epochs > 0
 optimizer: gd # gd (Gradient Descent)
+layers_config:
+  n_layers: 2 # n_layers > 0
+  units: [4, 1] # list len must be n_layers; values must be > 0
+  activations: [relu, sigmoid] # relu OR sigmoid; list len must be n_layers

@@ -8,10 +8,9 @@ def deriv_mse(A, Y):
     m = Y.size
     return 2/m * (A - Y.T)
 
-def error_computation(A, Y, task):
-    if task == 'bin_classification':
+def error_computation(A, Y, err_fun):
+    if err_fun == 'mse':
         return deriv_mse(A, Y)
-
-    if task == 'regression':
-        return deriv_mse(A, Y)
+    else:
+        raise ValueError('Invalid Error Function')
 

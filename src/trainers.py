@@ -15,13 +15,13 @@ def forward_prop(layers, W, b, X):
     return Z, A
 
 
-def back_prop(layers, task, Z, A, W, X, Y):
+def back_prop(layers, err_fun, Z, A, W, X, Y):
     L = len(layers)
     dZ, dW, db = [None] * L, [None] * L, [None] * L # maybe to delete and delete [] on dZ below
     
     # compute dZ for the last layer. By distributing 1/m before backprop (see error_computation()), the gradient with respect 
     # to weights and biases already includes the normalization factor, so (1/m) can be omitted during grandients and biases computation
-    dZ[-1] = error_computation(A[-1], Y, task)
+    dZ[-1] = error_computation(A[-1], Y, err_fun)
     
     # loop backwards through layers to calculate gradients
     for i in reversed(range(L)):
@@ -77,7 +77,7 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
         acc = accuracy(A[-1], Y)
         accuracy_data.append(acc * 100)
 
-        dW, db = back_prop(layers, hyperparameters['task'], Z, A, W, X, Y)
+        dW, db = back_prop(layers, hyperparameters['err_fun'], Z, A, W, X, Y)
         W, b, W_new, b_new = update_params(len(layers), W, b, dW, db, hyperparameters['eta'],
                                             hyperparameters['momentum'], hyperparameters['alpha'],
                                             hyperparameters['lambd'], W_new, b_new)
