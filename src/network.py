@@ -67,17 +67,14 @@ class Net:
         # Check for layers_config
         if "layers_config" in self._hyperparameters:
             layers_config = self._hyperparameters["layers_config"]
-            if "n_layers" not in layers_config or not isinstance(layers_config["n_layers"], int) or layers_config["n_layers"] <= 0:
-                raise InvalidHyperparameterError(f"'n_layers' must be a positive integer. Got {layers_config.get('n_layers')}.")
-
-            if "units" not in layers_config or not isinstance(layers_config["units"], list) or len(layers_config["units"]) != layers_config["n_layers"]:
-                raise InvalidHyperparameterError(f"'units' must be a list of length 'n_layers'. Got {layers_config.get('units')} with length {len(layers_config.get('units', []))}.")            
+            if "units" not in layers_config or not isinstance(layers_config["units"], list) or len(layers_config["units"]) < 1:
+                raise InvalidHyperparameterError(f"'units' must be a list of length greater than 0. Got {layers_config.get('units')} with length {len(layers_config.get('units', []))}.")            
             # Check that every entry in the units list is greater than 0
             if any(unit <= 0 for unit in layers_config["units"]):
                 raise InvalidHyperparameterError(f"All entries in 'units' must be greater than 0. Got {layers_config['units']}.")
 
-            if "activations" not in layers_config or not isinstance(layers_config["activations"], list) or len(layers_config["activations"]) != layers_config["n_layers"]:
-                raise InvalidHyperparameterError(f"'activations' must be a list of length 'n_layers'. Got {layers_config.get('activations')} with length {len(layers_config.get('activations', []))}.")
+            if "activations" not in layers_config or not isinstance(layers_config["activations"], list) or len(layers_config["activations"]) != len(layers_config["units"]):
+                raise InvalidHyperparameterError(f"'activations' must be a list of length equal to len(units). Got {layers_config.get('activations')} with length {len(layers_config.get('activations', []))}.")
 
             for activation in layers_config["activations"]:
                 if activation not in ["relu", "sigmoid"]: # Add more activations if needed
@@ -97,7 +94,7 @@ class Net:
     def build_net(self): # build the network based on the layers_config
         if 'layers_config' in self._hyperparameters:
             layers_config = self._hyperparameters['layers_config']
-            for k in range(layers_config['n_layers']):
+            for k in range(len(layers_config['units'])):
                 units = layers_config['units'][k]
                 activation = layers_config['activations'][k]
                 self.add_layer(units, activation)

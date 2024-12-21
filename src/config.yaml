@@ -8,6 +8,5 @@ lambd: 0.01 # must be lambd > 0 for activating regularization
 epochs: 1000 # epochs > 0
 optimizer: gd # gd (Gradient Descent)
 layers_config:
-  n_layers: 2 # n_layers > 0
-  units: [4, 1] # list len must be n_layers; values must be > 0
-  activations: [relu, sigmoid] # relu OR sigmoid; list len must be n_layers
+  units: [4, 1] # list len must be >0; values must be > 0
+  activations: [relu, sigmoid] # relu OR sigmoid; list len must be equal to len of units

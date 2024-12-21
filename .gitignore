@@ -2,3 +2,5 @@ __pycache__/
 *.ipynb
 *.csv
 TODO
+param_grid.yaml
+validation.py

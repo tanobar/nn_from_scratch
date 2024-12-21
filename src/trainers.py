@@ -1,5 +1,5 @@
 import numpy as np
-import pandas as pd # maybe i can move this to another file
+import pandas as pd
 from error_fun import *
 from metrics import *
 from layer import Layer
