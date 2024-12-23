@@ -9,30 +9,18 @@ def accuracy_bin_classification(A, Y):
 def mse(A, Y):
     return np.mean(np.square(A - Y.T))
 
+def deriv_mse(A, Y):
+    m = Y.size
+    return 2/m * (A - Y.T)
+
 def mee(A, Y):
     return np.mean(np.sqrt(np.sum((A - Y.T) ** 2, axis=1)))
 
 def accuracy(A, Y): # TODO change and modularize
     return accuracy_bin_classification(A, Y)
 
-
-def plot_accuracy(accuracy_data, epochs):
-    plt.figure(figsize=(10, 6))
-    plt.plot(range(epochs), accuracy_data, label="Accuracy", color="blue", linewidth=2)
-    plt.title("Accuracy vs Epochs", fontsize=14)
-    plt.xlabel("Epochs", fontsize=12)
-    plt.ylabel("Accuracy (%)", fontsize=12)
-    plt.grid(alpha=0.3)
-    plt.legend(fontsize=12)
-
-    # Evidenzia il massimo valore di accuracy
-    max_acc = max(accuracy_data)
-    max_epoch = accuracy_data.index(max_acc)
-    plt.annotate(f"Max Accuracy: {max_acc:.2f}%", 
-                 xy=(max_epoch, max_acc), 
-                 xytext=(max_epoch + epochs * 0.1, max_acc - 5),
-                 arrowprops=dict(facecolor='black', arrowstyle="->"),
-                 fontsize=12)
-
-    plt.show()
-
+def error_computation(A, Y, err_fun):
+    if err_fun == 'mse':
+        return deriv_mse(A, Y)
+    else:
+        raise ValueError('Invalid Error Function')

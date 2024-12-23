@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from error_fun import *
 from metrics import *
+from utils import *
 from layer import Layer
 
 
@@ -85,9 +85,7 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
         loss = mse(A[-1], Y)
         loss_data.append({'epoch': i, 'loss': loss})
 
-    # TODO put this saving in a function (maybe)
-    loss_df = pd.DataFrame(loss_data)
-    loss_df.to_csv('loss_values.csv', index=False)
+    loss_save(loss_data)
 
     plot_accuracy(accuracy_data, hyperparameters['epochs'])
 
@@ -122,12 +120,5 @@ def test_model_temp(X, Y, W, b, layers):
     acc = accuracy(A[-1], Y)
     print(f"Test Accuracy: " , acc)
 
-    #plotting the graphic of targets vs predicions
-    plt.plot(Y.flatten(), label="Target")
-    plt.plot(Y_pred.flatten(), label="Model")
-    plt.xlabel("Examples")
-    plt.ylabel("Values")
-    plt.title("Model Predictions vs. Target Values")
-    plt.legend()
-    plt.show()
+    plot_pred_vs_label(Y, Y_pred)
 

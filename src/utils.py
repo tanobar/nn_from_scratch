@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
 def one_hot_vector(Y):
     one_hot = np.zeros((Y.size, Y.max() + 1))
@@ -24,3 +26,45 @@ def one_hot_monk(X):
     
     return one_hot_encoded_matrix.T
 
+def loss_save(data):
+    loss_df = pd.DataFrame(data)
+    loss_df.to_csv('loss_values.csv', index=False)
+
+def loss_plot(path):
+    loss_df = pd.read_csv(path)
+
+    plt.plot(loss_df['epoch'], loss_df['loss'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Loss over Epochs')
+    plt.show()
+
+def plot_pred_vs_label(Y, Y_pred):
+    #plotting the graphic of targets vs predicions
+    plt.plot(Y.flatten(), label="Target")
+    plt.plot(Y_pred.flatten(), label="Model")
+    plt.xlabel("Examples")
+    plt.ylabel("Values")
+    plt.title("Model Predictions vs. Target Values")
+    plt.legend()
+    plt.show()
+
+def plot_accuracy(accuracy_data, epochs):
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(epochs), accuracy_data, label="Accuracy", color="blue", linewidth=2)
+    plt.title("Accuracy vs Epochs", fontsize=14)
+    plt.xlabel("Epochs", fontsize=12)
+    plt.ylabel("Accuracy (%)", fontsize=12)
+    plt.grid(alpha=0.3)
+    plt.legend(fontsize=12)
+
+    # enlight max accuracy
+    max_acc = max(accuracy_data)
+    max_epoch = accuracy_data.index(max_acc)
+    plt.annotate(f"Max Accuracy: {max_acc:.2f}%", 
+                 xy=(max_epoch, max_acc), 
+                 xytext=(max_epoch + epochs * 0.1, max_acc - 5),
+                 arrowprops=dict(facecolor='black', arrowstyle="->"),
+                 fontsize=12)
+
+    plt.show()
