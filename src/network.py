@@ -35,6 +35,7 @@ class Net:
         # validate the hyperparameter values. Modify allowed_values for adding/removing hyperparameters and allowed values
         allowed_values = {
             "err_fun": ["mse"],
+            "metric": ["mee", "mse", "acc_bin"],
             "initializer": ["uniform", "xavier", "he"],
             "optimizer": ["gd"]
         }
@@ -95,6 +96,10 @@ class Net:
                 activation = layers_config['activations'][k]
                 self.add_layer(units, activation)
 
+    #define a function that changes only the hyperparameters modified into the grid obtained from the validator
+    def set_hyperparameters(self, hyperparameters):
+        for key, value in hyperparameters.items():
+            self._hyperparameters[key] = value
 
     def get_hyperparameters(self):
         return self._hyperparameters

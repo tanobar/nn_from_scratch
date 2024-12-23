@@ -68,3 +68,31 @@ def plot_accuracy(accuracy_data, epochs):
                  fontsize=12)
 
     plt.show()
+
+def plot_mee(mee_values):
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(len(mee_values)), mee_values, label="MEE", color="red", linewidth=2)
+    plt.title("MEE vs Epochs", fontsize=14)
+    plt.xlabel("Epochs", fontsize=12)
+    plt.ylabel("MEE", fontsize=12)
+    plt.grid(alpha=0.3)
+    plt.legend(fontsize=12)
+
+    # enlight min mee
+    min_mee = min(mee_values)
+    min_epoch = mee_values.index(min_mee)
+    plt.annotate(f"Min MEE: {min_mee:.2f}", 
+                 xy=(min_epoch, min_mee), 
+                 xytext=(min_epoch + len(mee_values) * 0.1, min_mee + 0.1),
+                 arrowprops=dict(facecolor='black', arrowstyle="->"),
+                 fontsize=12)
+
+    plt.show()
+
+def plot_metric(data, epochs, metric):
+    if metric == 'acc_bin':
+        plot_accuracy(data, epochs)
+    if metric == 'mee':
+        plot_mee(data)
+    else:
+        raise ValueError('Invalid Metric')

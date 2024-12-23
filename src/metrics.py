@@ -16,11 +16,19 @@ def deriv_mse(A, Y):
 def mee(A, Y):
     return np.mean(np.sqrt(np.sum((A - Y.T) ** 2, axis=1)))
 
-def accuracy(A, Y): # TODO change and modularize
-    return accuracy_bin_classification(A, Y)
+def metric_acquisition(A, Y, metric):
+    if metric == 'acc_bin':
+        return accuracy_bin_classification(A, Y)
+    elif metric == 'mse':
+        return mse(A, Y)
+    elif metric == 'mee':
+        return mee(A, Y)
+    else:
+        raise ValueError('Invalid Metric')
 
 def error_computation(A, Y, err_fun):
     if err_fun == 'mse':
         return deriv_mse(A, Y)
     else:
         raise ValueError('Invalid Error Function')
+    

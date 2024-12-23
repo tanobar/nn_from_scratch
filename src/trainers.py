@@ -75,7 +75,7 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
     for i in range(hyperparameters['epochs']):
         Z, A = forward_prop(layers, W, b, X)
 
-        acc = accuracy(A[-1], Y)
+        acc = metric_acquisition(A[-1], Y, hyperparameters['metric'])
         accuracy_data.append(acc)
 
         dW, db = back_prop(layers, hyperparameters['err_fun'], Z, A, W, X, Y)
@@ -87,7 +87,7 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
 
     loss_save(loss_data)
 
-    plot_accuracy(accuracy_data, hyperparameters['epochs'])
+    plot_metric(accuracy_data, hyperparameters['epochs'], hyperparameters['metric'])
 
     return W, b
 
@@ -100,25 +100,25 @@ def train_model(X, Y, W, b, layers, hyperparameters):
     return model
 
 
-def test_model(X, Y, W, b, layers):
+def test_model(X, Y, W, b, layers, metric):
     
     # Forward propagation for predictions
     Z, A = forward_prop(layers, W, b, X)
 
-    acc = accuracy(A[-1], Y)
+    m = metric_acquisition(A[-1], Y, metric)
     
-    return acc
+    return m
 
 
-def test_model_temp(X, Y, W, b, layers):
+def test_model_temp(X, Y, W, b, layers, metric):
     
     # Forward propagation for predictions
     Z, A = forward_prop(layers, W, b, X)
     
     Y_pred = A[-1]
 
-    acc = accuracy(A[-1], Y)
-    print(f"Test Accuracy: " , acc)
+    m = metric_acquisition(A[-1], Y, metric)
+    print(f"Metric value: " , m)
 
     plot_pred_vs_label(Y, Y_pred)
 

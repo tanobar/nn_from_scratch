@@ -1,4 +1,5 @@
 err_fun: mse # MSE
+metric: acc_bin  # mee OR mse OR acc_bin
 input_features: 17 
 initializer: uniform # uniform OR xavier OR he
 eta: 0.1 # 0 < eta < 1
