@@ -90,9 +90,12 @@ def plot_mee(mee_values):
     plt.show()
 
 def plot_metric(data, epochs, metric):
+    print(metric)
     if metric == 'acc_bin':
         plot_accuracy(data, epochs)
+        return
     if metric == 'mee':
         plot_mee(data)
+        return
     else:
         raise ValueError('Invalid Metric')

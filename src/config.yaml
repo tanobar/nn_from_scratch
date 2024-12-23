@@ -7,6 +7,5 @@ alpha: 0.6 # parameter for momentum: 0.5 <= alpha <= 0.9. Out of this range, mom
 lambd: 0.01 # must be lambd > 0 for activating regularization
 epochs: 1000 # epochs > 0
 optimizer: gd # gd (Gradient Descent)
-layers_config:
-  units: [4, 1] # list len must be >0; values must be > 0
-  activations: [relu, sigmoid] # identity OR relu OR sigmoid; list len must be equal to len of units
+units: [4, 1] # list len must be >0; values must be > 0
+activations: [relu, sigmoid] # identity OR relu OR sigmoid; list len must be equal to len of units

@@ -70,13 +70,13 @@ def update_params(num_layers, W, b, dW, db, eta, alpha, lambd, W_new, b_new):
 
 # gradient descend algorithm
 def grad_descent(X, Y, W, b, layers, hyperparameters):
-    loss_data, accuracy_data = [], []
+    loss_data, metric_data = [], []
     W_new, b_new = None, None
     for i in range(hyperparameters['epochs']):
         Z, A = forward_prop(layers, W, b, X)
 
-        acc = metric_acquisition(A[-1], Y, hyperparameters['metric'])
-        accuracy_data.append(acc)
+        m = metric_acquisition(A[-1], Y, hyperparameters['metric'])
+        metric_data.append(m)
 
         dW, db = back_prop(layers, hyperparameters['err_fun'], Z, A, W, X, Y)
         W, b, W_new, b_new = update_params(len(layers), W, b, dW, db, hyperparameters['eta'],
@@ -87,7 +87,7 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
 
     loss_save(loss_data)
 
-    plot_metric(accuracy_data, hyperparameters['epochs'], hyperparameters['metric'])
+    plot_metric(metric_data, hyperparameters['epochs'], hyperparameters['metric'])
 
     return W, b
 
@@ -118,7 +118,7 @@ def test_model_temp(X, Y, W, b, layers, metric):
     Y_pred = A[-1]
 
     m = metric_acquisition(A[-1], Y, metric)
-    print(f"Metric value: " , m)
+    print(f"Metric value: ", m)
 
     plot_pred_vs_label(Y, Y_pred)
 

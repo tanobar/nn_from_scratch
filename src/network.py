@@ -61,21 +61,20 @@ class Net:
         if "epochs" in self._hyperparameters and not (self._hyperparameters["epochs"] > 0):
             raise InvalidHyperparameterError(f"'epochs' must be greater than 0. Got {type(self._hyperparameters['epochs'])}.")
 
-        # Check for layers_config
-        if "layers_config" in self._hyperparameters:
-            layers_config = self._hyperparameters["layers_config"]
-            if "units" not in layers_config or not isinstance(layers_config["units"], list) or len(layers_config["units"]) < 1:
-                raise InvalidHyperparameterError(f"'units' must be a list of length greater than 0. Got {layers_config.get('units')} with length {len(layers_config.get('units', []))}.")            
-            # Check that every entry in the units list is greater than 0
-            if any(unit <= 0 for unit in layers_config["units"]):
-                raise InvalidHyperparameterError(f"All entries in 'units' must be greater than 0. Got {layers_config['units']}.")
+        if "units" in self._hyperparameters and len(self._hyperparameters["units"]) < 1:
+            raise InvalidHyperparameterError(f"'units' must be a list of length greater than 0. Got {self._hyperparameters['units']} with length {len(self._hyperparameters['units'])}.")
+                   
+        # Check that every entry in the units list is greater than 0
+        for unit in self._hyperparameters["units"]:
+            if unit < 1:
+                raise InvalidHyperparameterError(f"Invalid number of units '{unit}'. Must be greater than 0.")
 
-            if "activations" not in layers_config or not isinstance(layers_config["activations"], list) or len(layers_config["activations"]) != len(layers_config["units"]):
-                raise InvalidHyperparameterError(f"'activations' must be a list of length equal to len(units). Got {layers_config.get('activations')} with length {len(layers_config.get('activations', []))}.")
-
-            for activation in layers_config["activations"]:
+        if "activations" in self._hyperparameters and len(self._hyperparameters["activations"]) != len(self._hyperparameters["units"]):
+           raise InvalidHyperparameterError(f"'activations' must be a list of length equal to len(units). Got {self._hyperparameters['activations']} with length {len(self._hyperparameters['activations'])}.")
+        
+        for activation in self._hyperparameters["activations"]:
                 if activation not in ["identity", "relu", "sigmoid"]: # Add more activations if needed
-                    raise InvalidHyperparameterError(f"Invalid activation '{activation}'. Allowed values are: {allowed_values['activations']}.")
+                    raise InvalidHyperparameterError(f"Invalid activation '{activation}'. Allowed values are: identity, relu, sigmoid.")
 
 
     def add_layer(self, num_units, activation): # add manually a layer to the network
@@ -88,18 +87,22 @@ class Net:
             self._b.append(np.zeros((num_units, 1)))
 
 
-    def build_net(self): # build the network based on the layers_config
-        if 'layers_config' in self._hyperparameters:
-            layers_config = self._hyperparameters['layers_config']
-            for k in range(len(layers_config['units'])):
-                units = layers_config['units'][k]
-                activation = layers_config['activations'][k]
-                self.add_layer(units, activation)
+    def build_net(self): # build the network based on units and activations in the hyperparameters
+        if 'units' in self._hyperparameters and 'activations' in self._hyperparameters:
+            units = self._hyperparameters['units']
+            activations = self._hyperparameters['activations']
+            for num_units, activation in zip(units, activations):
+                self.add_layer(num_units, activation)
 
-    #define a function that changes only the hyperparameters modified into the grid obtained from the validator
-    def set_hyperparameters(self, hyperparameters):
+
+    def rebuild_net(self, hyperparameters): # rebuild the network with new hyperparameters
         for key, value in hyperparameters.items():
             self._hyperparameters[key] = value
+        self._layers = []
+        self._W = []
+        self._b = []
+        self.build_net()
+
 
     def get_hyperparameters(self):
         return self._hyperparameters
@@ -123,4 +126,8 @@ class Net:
     def print_structure(self):
         for i, layer in enumerate(self._layers):
             print(f"Layer {i + 1}: Units = {layer.get_num_units()}, Activation = {layer.get_activation_fun()}")
+
+    def print_hyperparameters(self):
+        for key, value in self._hyperparameters.items():
+            print(f"{key}: {value}")
 
