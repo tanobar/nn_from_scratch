@@ -4,11 +4,17 @@ import matplotlib.pyplot as plt
 
 def accuracy_bin_classification(A, Y):
     predicted_classes = (A >= 0.5).astype(int)
-    return np.mean(predicted_classes == Y)
+    return np.mean(predicted_classes == Y) * 100
+
+def mse(A, Y):
+    return np.mean(np.square(A - Y.T))
+
+def mee(A, Y):
+    return np.mean(np.sqrt(np.sum((A - Y.T) ** 2, axis=1)))
 
 def accuracy(A, Y): # TODO change and modularize
     return accuracy_bin_classification(A, Y)
-    
+
 
 def plot_accuracy(accuracy_data, epochs):
     plt.figure(figsize=(10, 6))

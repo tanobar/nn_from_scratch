@@ -16,10 +16,16 @@ class Layer:
             return relu(Z)
         if self._activation_fun == 'sigmoid':
             return sigmoid(Z)
+        if self._activation_fun == 'identity':
+            return Z
+        raise ValueError(f"Unsupported activation function: {self._activation_fun}")
         
     def activate_deriv(self, Z):
         if self._activation_fun == 'relu':
             return deriv_relu(Z)
         if self._activation_fun == 'sigmoid':
             return deriv_sigmoid(Z)
+        if self._activation_fun == 'identity':
+            return deriv_identity(Z)
+        raise ValueError(f"Unsupported activation function: {self._activation_fun}")
 

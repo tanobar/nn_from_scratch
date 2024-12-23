@@ -1,5 +1,4 @@
 import numpy as np
-from utils import one_hot_vector
 
 def mse(A, Y):
     return np.mean(np.square(A - Y.T))

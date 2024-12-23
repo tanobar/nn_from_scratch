@@ -73,7 +73,7 @@ class Net:
                 raise InvalidHyperparameterError(f"'activations' must be a list of length equal to len(units). Got {layers_config.get('activations')} with length {len(layers_config.get('activations', []))}.")
 
             for activation in layers_config["activations"]:
-                if activation not in ["relu", "sigmoid"]: # Add more activations if needed
+                if activation not in ["identity", "relu", "sigmoid"]: # Add more activations if needed
                     raise InvalidHyperparameterError(f"Invalid activation '{activation}'. Allowed values are: {allowed_values['activations']}.")
 
 

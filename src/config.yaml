@@ -8,4 +8,4 @@ epochs: 1000 # epochs > 0
 optimizer: gd # gd (Gradient Descent)
 layers_config:
   units: [4, 1] # list len must be >0; values must be > 0
-  activations: [relu, sigmoid] # relu OR sigmoid; list len must be equal to len of units
+  activations: [relu, sigmoid] # identity OR relu OR sigmoid; list len must be equal to len of units

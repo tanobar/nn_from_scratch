@@ -12,3 +12,9 @@ def sigmoid(Z):
 def deriv_sigmoid(Z):
     return Z * (1 - Z)
 
+def identity(Z):
+    return Z
+
+def deriv_identity(Z):
+    return np.ones_like(Z)
+

@@ -76,7 +76,7 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
         Z, A = forward_prop(layers, W, b, X)
 
         acc = accuracy(A[-1], Y)
-        accuracy_data.append(acc * 100)
+        accuracy_data.append(acc)
 
         dW, db = back_prop(layers, hyperparameters['err_fun'], Z, A, W, X, Y)
         W, b, W_new, b_new = update_params(len(layers), W, b, dW, db, hyperparameters['eta'],
@@ -102,14 +102,24 @@ def train_model(X, Y, W, b, layers, hyperparameters):
     return model
 
 
-def test_model(W, b, layers, X, Y):
+def test_model(X, Y, W, b, layers):
+    
+    # Forward propagation for predictions
+    Z, A = forward_prop(layers, W, b, X)
+
+    acc = accuracy(A[-1], Y)
+    
+    return acc
+
+
+def test_model_temp(X, Y, W, b, layers):
     
     # Forward propagation for predictions
     Z, A = forward_prop(layers, W, b, X)
     
     Y_pred = A[-1]
 
-    acc = accuracy(A[-1], Y) * 100
+    acc = accuracy(A[-1], Y)
     print(f"Test Accuracy: " , acc)
 
     #plotting the graphic of targets vs predicions
