@@ -6,3 +6,4 @@ param_grid.yaml
 validator.py
 val.py
 config_test.yaml
+mnist.yaml

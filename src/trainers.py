@@ -17,7 +17,7 @@ def forward_prop(layers, W, b, X):
 
 def back_prop(layers, err_fun, Z, A, W, X, Y):
     L = len(layers)
-    dZ, dW, db = [None] * L, [None] * L, [None] * L # maybe to delete and delete [] on dZ below
+    dZ, dW, db = [None] * L, [None] * L, [None] * L
     
     # compute dZ for the last layer. By distributing 1/m before backprop (see error_computation()), the gradient with respect 
     # to weights and biases already includes the normalization factor, so (1/m) can be omitted during grandients and biases computation
@@ -87,19 +87,16 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
 
     loss_save(loss_data)
 
-    plot_metric(metric_data, hyperparameters['epochs'], hyperparameters['metric'])
+    #plot_metric(metric_data, hyperparameters['epochs'], hyperparameters['metric'])
 
     return W, b
 
 
 def train_model(X, Y, W, b, layers, hyperparameters):
     model = []
-    if hyperparameters['optimizer'] == 'gd':
-        W, b = grad_descent(X, Y, W, b, layers, hyperparameters)
-        model.extend([W, b])
-        return model
-    else:
-        raise NotImplementedError(f"Optimizer {hyperparameters['optimizer']} not implemented.")
+    W, b = grad_descent(X, Y, W, b, layers, hyperparameters)
+    model.extend([W, b])
+    return model
 
 
 def test_model(X, Y, W, b, layers, metric):

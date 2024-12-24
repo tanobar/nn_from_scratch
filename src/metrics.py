@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def accuracy_bin_classification(A, Y):
     predicted_classes = (A >= 0.5).astype(int)
-    return np.mean(predicted_classes == Y) * 100
+    return np.mean(predicted_classes == Y.T) * 100
 
 def mse(A, Y):
     return np.mean(np.square(A - Y.T))

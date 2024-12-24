@@ -36,8 +36,7 @@ class Net:
         allowed_values = {
             "err_fun": ["mse"],
             "metric": ["mee", "mse", "acc_bin"],
-            "initializer": ["uniform", "xavier", "he"],
-            "optimizer": ["gd"]
+            "initializer": ["uniform", "xavier", "he"]
         }
         
         # Check each key-value pair
