@@ -97,7 +97,9 @@ def train_model(X, Y, W, b, layers, hyperparameters):
     if hyperparameters['optimizer'] == 'gd':
         W, b = grad_descent(X, Y, W, b, layers, hyperparameters)
         model.extend([W, b])
-    return model
+        return model
+    else:
+        raise NotImplementedError(f"Optimizer {hyperparameters['optimizer']} not implemented.")
 
 
 def test_model(X, Y, W, b, layers, metric):
