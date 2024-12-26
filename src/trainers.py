@@ -86,13 +86,13 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
         loss_data.append({'epoch': i, 'loss': loss})
 
     loss_save(loss_data)
-
-    #plot_metric(metric_data, hyperparameters['epochs'], hyperparameters['metric'])
+    metric_save(metric_data, hyperparameters['metric'])
 
     return W, b
 
 
 def train_model(X, Y, W, b, layers, hyperparameters):
+    X = X.T
     model = []
     W, b = grad_descent(X, Y, W, b, layers, hyperparameters)
     model.extend([W, b])
@@ -100,7 +100,7 @@ def train_model(X, Y, W, b, layers, hyperparameters):
 
 
 def test_model(X, Y, W, b, layers, metric):
-    
+    X = X.T
     # Forward propagation for predictions
     Z, A = forward_prop(layers, W, b, X)
 
@@ -110,14 +110,14 @@ def test_model(X, Y, W, b, layers, metric):
 
 
 def test_model_temp(X, Y, W, b, layers, metric):
-    
+    X = X.T
     # Forward propagation for predictions
     Z, A = forward_prop(layers, W, b, X)
     
     Y_pred = A[-1]
 
+    plot_pred_vs_label(Y, Y_pred)
+
     m = metric_acquisition(A[-1], Y, metric)
     print(f"Metric value: ", m)
-
-    plot_pred_vs_label(Y, Y_pred)
 

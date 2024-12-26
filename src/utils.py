@@ -8,23 +8,23 @@ def one_hot_vector(Y):
     return one_hot.T
 
 def one_hot_monk(X):
-    # Transpose data to process features row-wise
-    X = X.T  # Dim: (num_examples, num_features)
+    # Transpose data to process examples row-wise
+    X = X.T  # Dim: (num_features, num_examples)
    
     unique_values_per_feature = [3, 3, 2, 3, 4, 2]
     
     one_hot_encoded_features = []
 
-    for col in range(X.shape[1]):
-        feature = X[:, col]
-        unique_values = unique_values_per_feature[col]
+    for row in range(X.shape[0]):
+        feature = X[row, :]
+        unique_values = unique_values_per_feature[row]
         
         one_hot = np.eye(unique_values)[feature.astype(int) - 1]  # One-hot encoding
         one_hot_encoded_features.append(one_hot)
 
     one_hot_encoded_matrix = np.concatenate(one_hot_encoded_features, axis=1)
     
-    return one_hot_encoded_matrix.T
+    return one_hot_encoded_matrix
 
 def loss_save(data):
     loss_df = pd.DataFrame(data)
@@ -39,6 +39,10 @@ def loss_plot(path):
     plt.title('Loss over Epochs')
     plt.show()
 
+def metric_save(data, metric):
+    metric_df = pd.DataFrame(data, columns=[metric])
+    metric_df.to_csv(f'{metric}_values.csv', index=False)
+
 def plot_pred_vs_label(Y, Y_pred):
     #plotting the graphic of targets vs predicions
     plt.plot(Y.flatten(), label="Target")
@@ -49,7 +53,11 @@ def plot_pred_vs_label(Y, Y_pred):
     plt.legend()
     plt.show()
 
-def plot_accuracy(accuracy_data, epochs):
+def plot_accuracy(path):
+    accuracy_df = pd.read_csv(path)
+    accuracy_data = accuracy_df['acc_bin'].tolist()
+    epochs = len(accuracy_data)
+    
     plt.figure(figsize=(10, 6))
     plt.plot(range(epochs), accuracy_data, label="Accuracy", color="blue", linewidth=2)
     plt.title("Accuracy vs Epochs", fontsize=14)
@@ -58,7 +66,7 @@ def plot_accuracy(accuracy_data, epochs):
     plt.grid(alpha=0.3)
     plt.legend(fontsize=12)
 
-    # enlight max accuracy
+    # highlight max accuracy
     max_acc = max(accuracy_data)
     max_epoch = accuracy_data.index(max_acc)
     plt.annotate(f"Max Accuracy: {max_acc:.2f}%", 
@@ -69,32 +77,28 @@ def plot_accuracy(accuracy_data, epochs):
 
     plt.show()
 
-def plot_mee(mee_values):
+def plot_mee(path):
+    mee_df = pd.read_csv(path)
+    mee_data = mee_df['mee'].tolist()
+    epochs = len(mee_data)
+    
     plt.figure(figsize=(10, 6))
-    plt.plot(range(len(mee_values)), mee_values, label="MEE", color="red", linewidth=2)
+    plt.plot(range(epochs), mee_data, label="MEE", color="red", linewidth=2)
     plt.title("MEE vs Epochs", fontsize=14)
     plt.xlabel("Epochs", fontsize=12)
     plt.ylabel("MEE", fontsize=12)
     plt.grid(alpha=0.3)
     plt.legend(fontsize=12)
 
-    # enlight min mee
-    min_mee = min(mee_values)
-    min_epoch = mee_values.index(min_mee)
+    # highlight min mee
+    min_mee = min(mee_data)
+    min_epoch = mee_data.index(min_mee)
     plt.annotate(f"Min MEE: {min_mee:.2f}", 
                  xy=(min_epoch, min_mee), 
-                 xytext=(min_epoch + len(mee_values) * 0.1, min_mee + 0.1),
+                 xytext=(min_epoch + epochs * 0.1, min_mee + 0.1),
                  arrowprops=dict(facecolor='black', arrowstyle="->"),
                  fontsize=12)
 
     plt.show()
 
-def plot_metric(data, epochs, metric):
-    if metric == 'acc_bin':
-        plot_accuracy(data, epochs)
-        return
-    if metric == 'mee':
-        plot_mee(data)
-        return
-    else:
-        raise ValueError('Invalid Metric')
+

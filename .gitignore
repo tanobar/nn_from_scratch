@@ -1,9 +1,8 @@
 __pycache__/
 *.ipynb
 *.csv
-TODO
-param_grid.yaml
-validator.py
-val.py
+TODO.txt
+param_grid_test_cup.yaml
+param_grid_mnist.yaml
 config_test.yaml
 mnist.yaml

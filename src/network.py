@@ -103,6 +103,14 @@ class Net:
         self.build_net()
 
 
+    def set_best_configuration(self, best):
+        self.rebuild_net(best['conf'])
+        self._W = best['candidate'][0]
+        self._b = best['candidate'][1]
+        self._hyperparameters['epochs'] = best['candidate'][2]
+        self.print_hyperparameters()
+
+
     def get_hyperparameters(self):
         return self._hyperparameters
 
