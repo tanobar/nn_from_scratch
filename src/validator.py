@@ -6,9 +6,9 @@ from trainers import *
 from joblib import Parallel, delayed
 
 class Validator:
-    def __init__(self):
+    def __init__(self, grid):
 
-        with open('param_grid_test_cup.yaml', 'r') as file:
+        with open(grid, 'r') as file:
             self.param_grid = yaml.safe_load(file)
 
         self.grid = list(ParameterGrid(self.param_grid))
@@ -17,7 +17,6 @@ class Validator:
 
         self.kfold = KFold(n_splits=3, shuffle=True, random_state=42)
         self.early_stopping_patience = 10  # Number of epochs to wait for improvement before stopping
-        self.min_improvement = 1e-3  # Minimum improvement to consider as significant
 
 
     def train_model_ES(self, X_train, Y_train, X_val, Y_val, network):
@@ -30,11 +29,11 @@ class Validator:
         candidate = [network.get_W(), network.get_b(), 1]
         network.get_hyperparameters()['epochs'] = 1
 
-        for epoch in range(1000):
+        for epoch in range(1000000):
             candidate = train_model(X_train, Y_train, candidate[0], candidate[1], network.get_layers(), network.get_hyperparameters())
             val_loss = test_model(X_val, Y_val, candidate[0], candidate[1], network.get_layers(), 'mse')
 
-            if val_loss < best_val_loss - self.min_improvement:
+            if val_loss < best_val_loss * 0.99:  # 1% improvement criteria
                 best_val_loss = val_loss
                 best_weights = candidate[0]
                 best_biases = candidate[1]
