@@ -16,7 +16,7 @@ class Validator:
         self.grid = [conf for conf in self.grid if len(conf['units']) == len(conf['activations'])]
 
         self.kfold = KFold(n_splits=3, shuffle=True, random_state=42)
-        self.early_stopping_patience = 10  # Number of epochs to wait for improvement before stopping
+        self.early_stopping_patience = 50  # Number of epochs to wait for improvement before stopping
 
 
     def train_model_ES(self, X_train, Y_train, X_val, Y_val, network):
@@ -67,7 +67,7 @@ class Validator:
                 }
             return None
 
-        search_metrics = Parallel(n_jobs=-1)(delayed(evaluate_configuration)(conf) for conf in tqdm(self.grid))
+        search_metrics = Parallel(n_jobs=4)(delayed(evaluate_configuration)(conf) for conf in tqdm(self.grid))
         search_metrics = [metric for metric in search_metrics if metric is not None]
 
         if network.get_hyperparameters()['metric'] == 'acc_bin':

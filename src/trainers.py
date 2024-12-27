@@ -121,3 +121,8 @@ def test_model_temp(X, Y, W, b, layers, metric):
     m = metric_acquisition(A[-1], Y, metric)
     print(f"Metric value: ", m)
 
+def blind_test(X, W, b, layers):
+    X = X.T
+    Z, A = forward_prop(layers, W, b, X)
+    return A[-1]
+
