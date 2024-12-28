@@ -16,6 +16,7 @@ class Net:
         self._layers = []
         self._W = []
         self._b = []
+        self.build_net()
 
 
     def _load_config(self, config_path):
@@ -105,9 +106,7 @@ class Net:
 
     def set_best_configuration(self, best):
         self.rebuild_net(best['conf'])
-        self._W = best['candidate'][0]
-        self._b = best['candidate'][1]
-        self._hyperparameters['epochs'] = best['candidate'][2]
+        self._hyperparameters['epochs'] = best['epochs']
         self.print_hyperparameters()
 
 

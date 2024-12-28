@@ -62,7 +62,7 @@ class Validator:
             if not np.isnan(conf_metrics).any():
                 return {
                     'conf': conf,
-                    'candidate': candidate,
+                    'epochs': candidate[2],
                     'metrics': np.mean(conf_metrics)
                 }
             return None

@@ -39,7 +39,7 @@ def back_prop(layers, err_fun, Z, A, W, X, Y):
 
 
 def update_params(num_layers, W, b, dW, db, eta, alpha, lambd, W_new, b_new):
-    if 0.5 <= alpha <= 0.9:
+    if alpha > 0:
         if W_new is None:
             W_new = [np.zeros_like(W[i]) for i in range(num_layers)]
         if b_new is None:
@@ -124,5 +124,5 @@ def test_model_temp(X, Y, W, b, layers, metric):
 def blind_test(X, W, b, layers):
     X = X.T
     Z, A = forward_prop(layers, W, b, X)
-    return A[-1]
+    return A[-1].T
 
