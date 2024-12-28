@@ -27,7 +27,6 @@ class Validator:
         patience_counter = 0
 
         candidate = [network.get_W(), network.get_b(), 1]
-        network.get_hyperparameters()['epochs'] = 1
 
         for epoch in range(1000000):
             candidate = train_model(X_train, Y_train, candidate[0], candidate[1], network.get_layers(), network.get_hyperparameters())

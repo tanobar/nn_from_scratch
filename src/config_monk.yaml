@@ -1,9 +1,11 @@
-err_fun: mse # MSE
+# task dependent values
+err_fun: mse # mse
 metric: acc_bin  # mee OR mse OR acc_bin
 input_features: 17 
+# hyperparameters
 initializer: uniform # uniform OR xavier OR he
 eta: 0.1 # 0 < eta < 1
-alpha: 0.6 # parameter for momentum: 0.5 <= alpha <= 0.9. Out of this range, momentum is disabled
+alpha: 0.6 # parameter for momentum: must be alpha > 0 for activating momentum
 lambd: 0.01 # must be lambd > 0 for activating regularization
 epochs: 1000 # epochs > 0
 units: [4, 1] # list len must be >0; values must be > 0

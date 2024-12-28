@@ -98,6 +98,7 @@ class Net:
     def rebuild_net(self, hyperparameters): # rebuild the network with new hyperparameters
         for key, value in hyperparameters.items():
             self._hyperparameters[key] = value
+        self._hyperparameters['epochs'] = 1
         self._layers = []
         self._W = []
         self._b = []

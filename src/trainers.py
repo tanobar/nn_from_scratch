@@ -3,6 +3,7 @@ import pandas as pd
 from metrics import *
 from utils import *
 from layer import Layer
+import matplotlib.pyplot as plt
 
 
 def forward_prop(layers, W, b, X):
@@ -74,16 +75,14 @@ def grad_descent(X, Y, W, b, layers, hyperparameters):
     W_new, b_new = None, None
     for i in range(hyperparameters['epochs']):
         Z, A = forward_prop(layers, W, b, X)
-
-        m = metric_acquisition(A[-1], Y, hyperparameters['metric'])
-        metric_data.append(m)
-
         dW, db = back_prop(layers, hyperparameters['err_fun'], Z, A, W, X, Y)
         W, b, W_new, b_new = update_params(len(layers), W, b, dW, db, hyperparameters['eta'],
                                             hyperparameters['alpha'], hyperparameters['lambd'], W_new, b_new)
 
         loss = mse(A[-1], Y)
         loss_data.append({'epoch': i, 'loss': loss})
+        m = metric_acquisition(A[-1], Y, hyperparameters['metric'])
+        metric_data.append(m)
 
     loss_save(loss_data)
     metric_save(metric_data, hyperparameters['metric'])
@@ -121,8 +120,65 @@ def test_model_temp(X, Y, W, b, layers, metric):
     m = metric_acquisition(A[-1], Y, metric)
     print(f"Metric value: ", m)
 
+
 def blind_test(X, W, b, layers):
     X = X.T
     Z, A = forward_prop(layers, W, b, X)
     return A[-1].T
 
+
+def train_and_evaluate(X_train, Y_train, X_test, Y_test, W, b, layers, hyperparameters):
+    train_loss_data, test_loss_data = [], []
+    train_metric_data, test_metric_data = [], []
+    W_new, b_new = None, None
+
+    for i in range(hyperparameters['epochs']):
+        # Training phase
+        Z_train, A_train = forward_prop(layers, W, b, X_train.T)
+        dW, db = back_prop(layers, hyperparameters['err_fun'], Z_train, A_train, W, X_train.T, Y_train)
+        W, b, W_new, b_new = update_params(len(layers), W, b, dW, db, hyperparameters['eta'],
+                                           hyperparameters['alpha'], hyperparameters['lambd'], W_new, b_new)
+
+        train_loss = mse(A_train[-1], Y_train)
+        train_loss_data.append({'epoch': i, 'loss': train_loss})
+        train_metric = metric_acquisition(A_train[-1], Y_train, hyperparameters['metric'])
+        train_metric_data.append(train_metric)
+
+        # Testing phase
+        Z_test, A_test = forward_prop(layers, W, b, X_test.T)
+        test_loss = mse(A_test[-1], Y_test)
+        test_loss_data.append({'epoch': i, 'loss': test_loss})
+        test_metric = metric_acquisition(A_test[-1], Y_test, hyperparameters['metric'])
+        test_metric_data.append(test_metric)
+
+    #loss_save(train_loss_data, 'train_loss')
+    #loss_save(test_loss_data, 'test_loss')
+    #metric_save(train_metric_data, f'train_{hyperparameters["metric"]}')
+    #metric_save(test_metric_data, f'test_{hyperparameters["metric"]}')
+
+    # Plotting
+    epochs = range(hyperparameters['epochs'])
+    plt.figure(figsize=(12, 5))
+
+    # Plot training and test loss
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs, [data['loss'] for data in train_loss_data], label='Training Loss')
+    plt.plot(epochs, [data['loss'] for data in test_loss_data], label='Test Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training and Test Loss over Epochs')
+    plt.legend()
+
+    # Plot training and test metric
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs, train_metric_data, label='Training Metric')
+    plt.plot(epochs, test_metric_data, label='Test Metric')
+    plt.xlabel('Epochs')
+    plt.ylabel(hyperparameters['metric'])
+    plt.title(f'Training and Test {hyperparameters["metric"]} over Epochs')
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+    return {'train_loss': train_loss_data[-1], 'test_loss': test_loss_data[-1], 'train_metric': train_metric_data[-1], 'test_metric': test_metric_data[-1]}
