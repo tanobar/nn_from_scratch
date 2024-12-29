@@ -2,11 +2,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def one_hot_vector(Y):
-    one_hot = np.zeros((Y.size, Y.max() + 1))
-    one_hot[np.arange(Y.size), Y.astype(int)] = 1
-    return one_hot.T
-
 def one_hot_monk(X):
     # Transpose data to process examples row-wise
     X = X.T  # Dim: (num_features, num_examples)
@@ -99,6 +94,30 @@ def plot_mee(path):
                  arrowprops=dict(facecolor='black', arrowstyle="->"),
                  fontsize=12)
 
+    plt.show()
+
+def plot_training_test_metrics(epochs, train_loss_data, test_loss_data, train_metric_data, test_metric_data, metric):
+    plt.figure(figsize=(12, 5))
+
+    # Plot training and test loss
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs, [data['loss'] for data in train_loss_data], label='Training')
+    plt.plot(epochs, [data['loss'] for data in test_loss_data], label='Test')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training and Test Loss over Epochs')
+    plt.legend()
+
+    # Plot training and test metric
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs, train_metric_data, label='Training')
+    plt.plot(epochs, test_metric_data, label='Test')
+    plt.xlabel('Epochs')
+    plt.ylabel(metric)
+    plt.title(f'Training and Test {metric} over Epochs')
+    plt.legend()
+
+    plt.tight_layout()
     plt.show()
 
 

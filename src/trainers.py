@@ -1,10 +1,6 @@
 import numpy as np
-import pandas as pd
 from metrics import *
 from utils import *
-from layer import Layer
-import matplotlib.pyplot as plt
-
 
 def forward_prop(layers, W, b, X):
     Z, A = [None] * len(layers), [None] * len(layers)
@@ -151,34 +147,15 @@ def train_and_evaluate(X_train, Y_train, X_test, Y_test, W, b, layers, hyperpara
         test_metric = metric_acquisition(A_test[-1], Y_test, hyperparameters['metric'])
         test_metric_data.append(test_metric)
 
-    #loss_save(train_loss_data, 'train_loss')
-    #loss_save(test_loss_data, 'test_loss')
-    #metric_save(train_metric_data, f'train_{hyperparameters["metric"]}')
-    #metric_save(test_metric_data, f'test_{hyperparameters["metric"]}')
-
     # Plotting
     epochs = range(hyperparameters['epochs'])
-    plt.figure(figsize=(12, 5))
+    plot_training_test_metrics(epochs, train_loss_data, test_loss_data, train_metric_data, test_metric_data, hyperparameters['metric'])
 
-    # Plot training and test loss
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs, [data['loss'] for data in train_loss_data], label='Training Loss')
-    plt.plot(epochs, [data['loss'] for data in test_loss_data], label='Test Loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.title('Training and Test Loss over Epochs')
-    plt.legend()
+    return {
+        'Model': [W, b],
+        'train_loss': train_loss_data[-1]['loss'],
+        'test_loss': test_loss_data[-1]['loss'],
+        'train_metric': train_metric_data[-1],
+        'test_metric': test_metric_data[-1]
+    }
 
-    # Plot training and test metric
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs, train_metric_data, label='Training Metric')
-    plt.plot(epochs, test_metric_data, label='Test Metric')
-    plt.xlabel('Epochs')
-    plt.ylabel(hyperparameters['metric'])
-    plt.title(f'Training and Test {hyperparameters["metric"]} over Epochs')
-    plt.legend()
-
-    plt.tight_layout()
-    plt.show()
-
-    return {'train_loss': train_loss_data[-1], 'test_loss': test_loss_data[-1], 'train_metric': train_metric_data[-1], 'test_metric': test_metric_data[-1]}
