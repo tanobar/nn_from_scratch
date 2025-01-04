@@ -108,7 +108,6 @@ class Net:
     def set_best_configuration(self, best):
         self.rebuild_net(best['conf'])
         self._hyperparameters['epochs'] = best['epochs']
-        self.print_hyperparameters()
 
 
     def get_hyperparameters(self):
