@@ -36,7 +36,7 @@ def back_prop(layers, err_fun, Z, A, W, X, Y):
 
 
 def update_params(num_layers, W, b, dW, db, eta, alpha, lambd, W_new, b_new):
-    if alpha > 0:
+    if 0.5 <= alpha <= 0.9:
         if W_new is None:
             W_new = [np.zeros_like(W[i]) for i in range(num_layers)]
         if b_new is None:

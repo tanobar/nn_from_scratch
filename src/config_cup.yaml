@@ -5,7 +5,7 @@ input_features: 12
 # hyperparameters
 initializer: he # uniform OR xavier OR he
 eta: 0.001 # 0 < eta < 1
-alpha: 0.8 # parameter for momentum: must be alpha > 0 for activating momentum
+alpha: 0.8 # parameter for momentum: must be 0.5 <= alpha <= 0.9 for activating momentum
 lambd: 0.000005 # must be lambd > 0 for activating regularization
 epochs: 490 # epochs > 0
 units: [768, 768, 3] # list len must be > 0; values must be > 0

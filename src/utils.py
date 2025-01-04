@@ -102,7 +102,7 @@ def plot_training_test_metrics(epochs, train_loss_data, test_loss_data, train_me
     # Plot training and test loss
     plt.subplot(1, 2, 1)
     plt.plot(epochs, [data['loss'] for data in train_loss_data], label='Training')
-    plt.plot(epochs, [data['loss'] for data in test_loss_data], label='Test')
+    plt.plot(epochs, [data['loss'] for data in test_loss_data], label='Test', linestyle='--')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.title('Training and Test Loss over Epochs')
@@ -111,7 +111,7 @@ def plot_training_test_metrics(epochs, train_loss_data, test_loss_data, train_me
     # Plot training and test metric
     plt.subplot(1, 2, 2)
     plt.plot(epochs, train_metric_data, label='Training')
-    plt.plot(epochs, test_metric_data, label='Test')
+    plt.plot(epochs, test_metric_data, label='Test', linestyle='--')
     plt.xlabel('Epochs')
     plt.ylabel(metric)
     plt.title(f'Training and Test {metric} over Epochs')
