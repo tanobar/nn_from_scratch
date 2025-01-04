@@ -1,0 +1,13 @@
+initializer: [he]
+eta: [0.0005, 0.001, 0.002]
+alpha: [0.8, 0.85, 0.9]
+lambd: [0.000005, 0.00001, 0.00002]
+units: [
+          [768, 768, 3],          
+          [1024, 512, 3],
+          [1024, 1024, 3]
+]
+activations: [
+          ['relu', 'identity'],
+          ['relu', 'relu', 'identity']
+]

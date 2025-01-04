@@ -1,11 +1,9 @@
 __pycache__/
-*.ipynb
+test.ipynb
+skl.ipynb
+
 *.csv
 TODO.txt
 param_grid_test.yaml
 param_grid_mnist.yaml
-param_grid_cup.yaml
-param_grid_cup2.yaml
 config_test.yaml
-config_mnist.yaml
-config_cup.yaml

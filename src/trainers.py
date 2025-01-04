@@ -44,14 +44,14 @@ def update_params(num_layers, W, b, dW, db, eta, alpha, lambd, W_new, b_new):
 
         for i in range(num_layers):
             # momentum
-            W_new[i] = eta * dW[i] + alpha * W_new[i]
-            b_new[i] = eta * db[i] + alpha * b_new[i]
+            W_new[i] = -eta * dW[i] + alpha * W_new[i]
+            b_new[i] = -eta * db[i] + alpha * b_new[i]
 
             if lambd > 0:
-                W[i] = W[i] - W_new[i] - eta * lambd * W[i]
+                W[i] = W[i] + W_new[i] - eta * lambd * W[i]
             else:
-                W[i] = W[i] - W_new[i]
-            b[i] = b[i] - b_new[i]
+                W[i] = W[i] + W_new[i]
+            b[i] = b[i] + b_new[i]
 
     else:
         for i in range(num_layers):
@@ -152,7 +152,7 @@ def train_and_evaluate(X_train, Y_train, X_test, Y_test, W, b, layers, hyperpara
     plot_training_test_metrics(epochs, train_loss_data, test_loss_data, train_metric_data, test_metric_data, hyperparameters['metric'])
 
     return {
-        'Model': [W, b],
+        'model': [W, b],
         'train_loss': train_loss_data[-1]['loss'],
         'test_loss': test_loss_data[-1]['loss'],
         'train_metric': train_metric_data[-1],

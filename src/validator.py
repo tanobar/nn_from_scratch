@@ -66,7 +66,7 @@ class Validator:
                 }
             return None
 
-        search_metrics = Parallel(n_jobs=4)(delayed(evaluate_configuration)(conf) for conf in tqdm(self.grid))
+        search_metrics = Parallel(n_jobs=5)(delayed(evaluate_configuration)(conf) for conf in tqdm(self.grid))
         search_metrics = [metric for metric in search_metrics if metric is not None]
 
         if network.get_hyperparameters()['metric'] == 'acc_bin':
