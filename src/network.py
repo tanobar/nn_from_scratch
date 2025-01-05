@@ -10,6 +10,51 @@ class InvalidHyperparameterError(Exception):
 
 
 class Net:
+    """
+    A class used to represent a Neural Network.
+    Attributes
+    ----------
+    _hyperparameters : dict
+        A dictionary containing the hyperparameters of the network.
+    _layers : list
+        A list containing the layers of the network.
+    _W : list
+        A list containing the weight matrices of the network.
+    _b : list
+        A list containing the bias vectors of the network.
+    Methods
+    -------
+    __init__(config_path)
+        Initializes the network with the given configuration file.
+    _load_config(config_path)
+        Loads hyperparameters from a YAML configuration file.
+    _validate_hyperparameters()
+        Validates the hyperparameter values.
+    add_layer(num_units, activation)
+        Adds a layer to the network manually.
+    build_net()
+        Builds the network based on units and activations in the hyperparameters.
+    rebuild_net(hyperparameters)
+        Rebuilds the network with new hyperparameters.
+    set_best_configuration(best)
+        Sets the best configuration for the network.
+    get_hyperparameters()
+        Returns the hyperparameters of the network.
+    get_num_features()
+        Returns the number of input features.
+    get_layers()
+        Returns the layers of the network.
+    get_W()
+        Returns the weight matrices of the network.
+    get_b()
+        Returns the bias vectors of the network.
+    get_num_inputs()
+        Returns the number of inputs coming from the previous layer.
+    print_structure()
+        Prints the structure of the network.
+    print_hyperparameters()
+        Prints the hyperparameters of the network.
+    """
     def __init__(self, config_path):
         self._hyperparameters = self._load_config(config_path)
         self._validate_hyperparameters()
@@ -77,17 +122,17 @@ class Net:
                     raise InvalidHyperparameterError(f"Invalid activation '{activation}'. Allowed values are: identity, relu, sigmoid.")
 
 
-    def add_layer(self, num_units, activation): # add manually a layer to the network
+    def add_layer(self, num_units, activation):
         self._layers.append(Layer(num_units, activation))
         if len(self._W) == 0: # it means that is the first hidden layer and recives as input the feature matrix X
             self._W.append(init_weights(self._hyperparameters['initializer'], num_units, self.get_num_features()))
             self._b.append(np.zeros((num_units, 1)))
-        else:
+        else: # ops order: first append then init
             self._W.append(init_weights(self._hyperparameters['initializer'], num_units, self.get_num_inputs()))
             self._b.append(np.zeros((num_units, 1)))
 
 
-    def build_net(self): # build the network based on units and activations in the hyperparameters
+    def build_net(self):
         if 'units' in self._hyperparameters and 'activations' in self._hyperparameters:
             units = self._hyperparameters['units']
             activations = self._hyperparameters['activations']
@@ -95,7 +140,7 @@ class Net:
                 self.add_layer(num_units, activation)
 
 
-    def rebuild_net(self, hyperparameters): # rebuild the network with new hyperparameters
+    def rebuild_net(self, hyperparameters):
         for key, value in hyperparameters.items():
             self._hyperparameters[key] = value
         self._hyperparameters['epochs'] = 1
@@ -126,7 +171,7 @@ class Net:
         return self._b
 
     def get_num_inputs(self):
-        # -2 access the second-last layer, it depends on operations order
+        # -2 access the second-last layer, it depends on python operations order: first append then init
         return self.get_layers()[len(self._layers)-2].get_num_units()
 
     def print_structure(self):

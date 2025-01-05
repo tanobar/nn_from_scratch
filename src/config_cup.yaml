@@ -1,4 +1,6 @@
-# Task-dependent values
+# CONFIGURATION FILE FOR CUP NN
+#####################
+# task-dependent values
 err_fun: mse # mse
 metric: mee # mee OR mse OR acc_bin
 input_features: 12

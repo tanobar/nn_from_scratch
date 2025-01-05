@@ -6,6 +6,25 @@ from trainers import *
 from joblib import Parallel, delayed
 
 class Validator:
+    """
+    A class used to perform validation and hyperparameter tuning for a neural network.
+    Attributes
+    ----------
+    param_grid : dict
+        A dictionary containing the hyperparameter grid loaded from a YAML file.
+    grid : list
+        A list of all valid hyperparameter configurations.
+    kfold : KFold
+        An instance of KFold for cross-validation.
+    early_stopping_patience : int
+        Number of epochs to wait for improvement before stopping early.
+    Methods
+    -------
+    train_model_ES(X_train, Y_train, X_val, Y_val, network)
+        Trains the model with early stopping and returns the best weights, biases, and epoch.
+    grid_search(X, Y, network)
+        Performs grid search over the hyperparameter configurations and returns the best configuration.
+    """
     def __init__(self, grid):
 
         with open(grid, 'r') as file:
@@ -58,6 +77,7 @@ class Validator:
                 candidate = self.train_model_ES(X_train, Y_train, X_val, Y_val, network)
                 m = test_model(X_val, Y_val, candidate[0], candidate[1], network.get_layers(), network.get_hyperparameters()['metric'])
                 conf_metrics.append(m)
+
             if not np.isnan(conf_metrics).any():
                 return {
                     'conf': conf,
@@ -66,6 +86,7 @@ class Validator:
                 }
             return None
 
+        # parallelize the grid search: eache iteration is done by a different core (n_jobs specifies the number of cores)
         search_metrics = Parallel(n_jobs=5)(delayed(evaluate_configuration)(conf) for conf in tqdm(self.grid))
         search_metrics = [metric for metric in search_metrics if metric is not None]
 

@@ -1,6 +1,25 @@
 from activations import *
 
 class Layer:
+    """
+    A class used to represent a Layer in a neural network.
+    Attributes
+    ----------
+    _num_units : int
+        The number of units (neurons) in the layer.
+    _activation_fun : str
+        The activation function used in the layer. Supported values are 'relu', 'sigmoid', and 'identity'.
+    Methods
+    -------
+    get_num_units():
+        Returns the number of units in the layer.
+    get_activation_fun():
+        Returns the activation function used in the layer.
+    activate(Z):
+        Applies the activation function to the input Z and returns the result.
+    activate_deriv(Z):
+        Applies the derivative of the activation function to the input Z and returns the result.
+    """
     def __init__(self, num_units, activation_fun):
         self._num_units = num_units
         self._activation_fun = activation_fun

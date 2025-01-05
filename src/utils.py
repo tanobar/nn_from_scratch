@@ -3,6 +3,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def one_hot_monk(X):
+    """
+    Perform one-hot encoding on the given dataset for the MONK problem.
+    Parameters:
+    X (numpy.ndarray): A 2D array where each row represents a feature and each column represents an example.
+                       The shape of X should be (num_features, num_examples).
+    Returns:
+    numpy.ndarray: A 2D array where each row represents an example and each column represents a one-hot encoded feature.
+                   The shape of the returned array will be (num_examples, sum(unique_values_per_feature)).
+    """
     # Transpose data to process examples row-wise
     X = X.T  # Dim: (num_features, num_examples)
    
@@ -22,10 +31,27 @@ def one_hot_monk(X):
     return one_hot_encoded_matrix
 
 def loss_save(data):
+    """
+    Save loss data to a CSV file.
+
+    Parameters:
+    data (list or dict): The loss data to be saved. It can be a list of dictionaries or a dictionary of lists.
+
+    Returns:
+    None
+    """
     loss_df = pd.DataFrame(data)
     loss_df.to_csv('loss_values.csv', index=False)
 
 def loss_plot(path):
+    """
+    Plots the loss over epochs from a CSV file.
+    Parameters:
+    path (str): The file path to the CSV file containing the loss data. 
+                The CSV file should have columns 'epoch' and 'loss'.
+    Returns:
+    None
+    """
     loss_df = pd.read_csv(path)
 
     plt.plot(loss_df['epoch'], loss_df['loss'])
@@ -35,6 +61,16 @@ def loss_plot(path):
     plt.show()
 
 def metric_save(data, metric):
+    """
+    Save metric data to a CSV file.
+
+    Parameters:
+    data (list or array-like): The data to be saved.
+    metric (str): The name of the metric, which will be used as the column name in the CSV file.
+
+    Returns:
+    None
+    """
     metric_df = pd.DataFrame(data, columns=[metric])
     metric_df.to_csv(f'{metric}_values.csv', index=False)
 
@@ -49,6 +85,23 @@ def plot_pred_vs_label(Y, Y_pred):
     plt.show()
 
 def plot_accuracy(path):
+    """
+    Plots the accuracy over epochs from a CSV file.
+    Parameters:
+    path (str): The file path to the CSV file containing accuracy data. 
+                The CSV file should have a column named 'acc_bin' with accuracy values.
+    The function reads the accuracy data from the CSV file, plots it against the number of epochs,
+    and highlights the maximum accuracy achieved during the training process.
+    The plot includes:
+    - A line plot of accuracy vs. epochs.
+    - A title "Accuracy vs Epochs".
+    - X-axis labeled as "Epochs".
+    - Y-axis labeled as "Accuracy (%)".
+    - A grid for better readability.
+    - A legend indicating the accuracy line.
+    - An annotation pointing to the maximum accuracy value on the plot.
+    The plot is displayed using matplotlib's `plt.show()` function.
+    """
     accuracy_df = pd.read_csv(path)
     accuracy_data = accuracy_df['acc_bin'].tolist()
     epochs = len(accuracy_data)
@@ -73,6 +126,12 @@ def plot_accuracy(path):
     plt.show()
 
 def plot_mee(path):
+    """
+    Plots the Mean Euclidean Error (MEE) over epochs from a CSV file.
+    Parameters:
+    path (str): The file path to the CSV file containing the MEE data. The CSV file should have a column named 'mee'.
+    The function reads the MEE data from the CSV file, plots it against the number of epochs, and highlights the minimum MEE value on the plot.
+    """
     mee_df = pd.read_csv(path)
     mee_data = mee_df['mee'].tolist()
     epochs = len(mee_data)
@@ -97,6 +156,18 @@ def plot_mee(path):
     plt.show()
 
 def plot_training_test_metrics(epochs, train_loss_data, test_loss_data, train_metric_data, test_metric_data, metric):
+    """
+    Plots the training and test loss and a specified metric over epochs.
+    Parameters:
+    epochs (list): A list of epoch numbers.
+    train_loss_data (list): A list of dictionaries containing training loss data for each epoch.
+    test_loss_data (list): A list of dictionaries containing test loss data for each epoch.
+    train_metric_data (list): A list of training metric values for each epoch.
+    test_metric_data (list): A list of test metric values for each epoch.
+    metric (str): The name of the metric to be plotted (e.g., 'Accuracy', 'Precision').
+    Returns:
+    None
+    """
     plt.figure(figsize=(12, 5))
 
     # Plot training and test loss
