@@ -1,3 +1,6 @@
+# CONFIGURATION FILE FOR MNIST
+#####################
+# task-dependent values
 err_fun: mse # mse
 metric: acc_bin # mee OR mse OR acc_bin
 input_features: 784
