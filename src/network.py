@@ -1,7 +1,7 @@
 import yaml
 import numpy as np
 from layer import Layer
-from inizializations import *
+from initializations import *
 
 
 class InvalidHyperparameterError(Exception):
