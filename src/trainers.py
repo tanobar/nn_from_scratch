@@ -191,19 +191,6 @@ def test_model(X, Y, W, b, layers, metric):
     return m
 
 
-def test_model_temp(X, Y, W, b, layers, metric):
-    X = X.T
-    # Forward propagation for predictions
-    Z, A = forward_prop(layers, W, b, X)
-    
-    Y_pred = A[-1]
-
-    plot_pred_vs_label(Y, Y_pred)
-
-    m = metric_acquisition(A[-1], Y, metric)
-    print(f"Metric value: ", m)
-
-
 def blind_test(X, W, b, layers):
     """
     Perform a blind test on the given input data using the provided weights and biases.

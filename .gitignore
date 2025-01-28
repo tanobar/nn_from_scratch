@@ -1,7 +1,2 @@
 __pycache__/
-test.ipynb
-skl.ipynb
-TODO.txt
-param_grid_test.yaml
-param_grid_mnist.yaml
-config_test.yaml
+*.pdf
